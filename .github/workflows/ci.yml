@@ -41,14 +41,11 @@ jobs:
 
       - name: Run Pytest
         id: run_tests
+        shell: bash
         run: |
-          - name: Run Pytest
-        id: run_tests
-        run: |
-          # 開啟 pipefail，只要 pytest 失敗，整個指令就會被認定為失敗
           set -o pipefail
           pytest | tee pytest.log
-        
+      
       - name: AI Diagnosis on Failure
         if: failure() && steps.run_tests.outcome == 'failure'
         env:

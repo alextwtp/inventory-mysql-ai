@@ -177,7 +177,9 @@ def test_inventory_out_item_not_found():
             receiver="Bob",
             shipper="Tom",
         )
-
+        
+def test_force_failure():
+    assert False, "故意讓測試失敗以觸發 AI 診斷！"
 
 def test_inventory_out_requires_receiver_and_shipper():
     repo = FakeMySQLRepo(FakeDBItem(pid="A001", item_name="Apple", qty=10))

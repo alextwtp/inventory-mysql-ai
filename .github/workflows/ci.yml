@@ -61,10 +61,10 @@ jobs:
               with open('pytest.log', 'r') as f:
                   log_content = f.read()
           except Exception as e:
-              log_content = f'無法讀取 log 檔案: {e}'
-
-          prompt = f'以下是 CI/CD 流程中 Pytest 執行的錯誤 Log，請用繁體中文以資深工程師的角度簡短分析失敗原因並給出修補建議：\n\n{log_content}'
-
+              log_content = f"Can't read log file: {e}"
+               
+          prompt = f"You are a Senior DevOps and Backend Engineer. Please analyze the following pytest test failure log in English. Provide a concise root-cause diagnosis and step-by-step fix recommendations:\n\n{log_content}"  
+          
           headers = {
               'Authorization': f'Bearer {api_key}',
               'Content-Type': 'application/json'

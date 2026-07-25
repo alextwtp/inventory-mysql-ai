@@ -64,8 +64,8 @@ jobs:
           except Exception as e:
               log_content = f'Cannot read log file: {e}'
           
-          prompt = f'以下是 CI/CD 流程中 Pytest 執行的錯誤 Log，請用繁體中文以資深工程師的角度簡短分析失敗原因，並給出修復建議：\n\n{log_content}'
-          
+          prompt = f'Please analyze the following pytest test failure log in English. Provide a concise root-cause diagnosis and step-by-step fix recommendations:\n\n{log_content}'
+                    
           headers = {
               'Authorization': f'Bearer {api_key}',
               'Content-Type': 'application/json'

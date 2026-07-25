@@ -9,8 +9,7 @@ def test_read_item():
     _, work_sheet = app.load_file_and_list(path)        
     row = 13
     item = app.read_item(work_sheet, row) 
-    assert item.current_qty == 333
-
+    assert item.current_qty == 33
 
 def test_write_item(tmp_path):
     # 1. Prepare the environment

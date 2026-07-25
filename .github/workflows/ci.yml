@@ -1,0 +1,86 @@
+name: CI with AI Diagnosis
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/python-10@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pytest requests
+
+      - name: Run Pytest
+        id: run_tests
+        run: |
+          # 執行測試並將 Log 同時輸出至螢幕與 pytest.log 檔案
+          pytest | tee pytest.log
+
+      - name: AI Diagnosis on Failure
+        if: failure() && steps.run_tests.outcome == 'failure'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python -c "
+          import os, requests
+
+          api_key = os.getenv('OPENAI_API_KEY')
+          if not api_key:
+              print('Error: OPENAI_API_KEY is not set.')
+              exit(1)
+
+          try:
+              with open('pytest.log', 'r') as f:
+                  log_content = f.read()[-3000:] # 抓取最後 3000 字元的 Error Log
+          except Exception as e:
+              log_content = f'Could not read pytest.log: {e}'
+
+          prompt = f'以下是 CI/CD 流程中 Pytest 執行的錯誤 Log，請用繁體中文以資深工程師的角度簡短分析失敗原因，並給出修復建議：\n\n{log_content}'
+
+          headers = {
+              'Authorization': f'Bearer {api_key}',
+              'Content-Type': 'application/json'
+          }
+          data = {
+              'model': 'gpt-4o-mini',
+              'messages': [{'role': 'user', 'content': prompt}]
+          }
+
+          res = requests.post('https://api.openai.com/v1/chat/completions', json=data, headers=headers)
+          if res.status_code == 200:
+              analysis = res.json()['choices'][0]['message']['content']
+              print('\n==================== 🤖 AI 錯誤診斷報告 ====================')
+              print(analysis)
+              print('============================================================\n')
+          else:
+              print(f'AI Analysis Failed: {res.status_code} - {res.text}')
+          "

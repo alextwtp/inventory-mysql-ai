@@ -42,9 +42,13 @@ jobs:
       - name: Run Pytest
         id: run_tests
         run: |
-          # 執行測試並將 Log 同時輸出至螢幕與 pytest.log 檔案
+          - name: Run Pytest
+        id: run_tests
+        run: |
+          # 開啟 pipefail，只要 pytest 失敗，整個指令就會被認定為失敗
+          set -o pipefail
           pytest | tee pytest.log
-
+        
       - name: AI Diagnosis on Failure
         if: failure() && steps.run_tests.outcome == 'failure'
         env:

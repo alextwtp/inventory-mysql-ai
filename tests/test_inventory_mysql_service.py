@@ -162,7 +162,7 @@ def test_inventory_out_success():
     assert item.current_qty == 6
     assert item.buyer == "Bob"
     assert item.shipper == "Tom"
-    assert repo.updated["qty"] == 6
+    assert repo.updated["qty"] == 66
 
 
 def test_inventory_out_item_not_found():
@@ -178,8 +178,8 @@ def test_inventory_out_item_not_found():
             shipper="Tom",
         )
         
-def test_force_failure():
-    assert False, "故意讓測試失敗以觸發 AI 診斷！"
+# def test_force_failure():
+#     assert False, "故意讓測試失敗以觸發 AI 診斷！"
 
 def test_inventory_out_requires_receiver_and_shipper():
     repo = FakeMySQLRepo(FakeDBItem(pid="A001", item_name="Apple", qty=10))

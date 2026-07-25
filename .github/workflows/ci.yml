@@ -213,7 +213,7 @@ jobs:
           except Exception as e:
               log_content = f'Cannot read log file: {e}'
 
-          prompt = f'You are a Senior DevOps and Backend Engineer. Please analyze the following pytest test failure log in English. Provide a concise root-cause diagnosis and step-by-step fix recommendations:\n\n{log_content}''
+          prompt = f'You are a Senior DevOps and Backend Engineer. Please analyze the following pytest test failure log in English. Provide a concise root-cause diagnosis and step-by-step fix recommendations:\n\n{log_content}'
           headers = {
               'Authorization': f'Bearer {api_key}',
               'Content-Type': 'application/json'

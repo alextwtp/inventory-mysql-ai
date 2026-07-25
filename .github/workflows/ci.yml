@@ -75,8 +75,8 @@ jobs:
               'model': 'gpt-4o-mini',
               'messages': [{'role': 'user', 'content': prompt}]
           }
-
-          res = requests.post('https://api.openai.com/v1/chat/completions', json=data, headers=headers)
+           
+          res = requests.post('https://api.openai.com/v1/chat/completions', json=data, headers=headers, timeout=30)
           if res.status_code == 200:
               analysis = res.json()['choices'][0]['message']['content']
               print('\n==================== 🤖 AI 錯誤診斷報告 ====================')

@@ -25,6 +25,8 @@ It was later extended with FastAPI, MySQL, SQLAlchemy, Docker Compose, automated
 * Docker Compose environment
 * Automated tests with pytest
 * Coverage enforcement in CI
+* 🤖 **AI-Driven CI Failure Diagnosis (OpenAI API / gpt-4o-mini Integration)**
+* 🤖 **Automated PR Code Review via CodeRabbit AI**
 * GitHub Actions CI/CD
 * Docker Hub image publishing
 * Safe sample inventory data
@@ -455,7 +457,7 @@ The test suite covers:
 
 API-layer tests use fake service objects where appropriate. This keeps the normal test suite fast and stable without requiring a live MySQL database for every test run.
 
-The real MySQL path is verified separately through Docker Compose and the manual database-check scripts.
+The real MySQL path is verified separately through Docker Compose and the manual database-check scripts.  
 
 ---
 
@@ -479,30 +481,40 @@ Real operational Excel files are excluded from source control.
 
 ---
 
-## GitHub Actions CI
+---
 
-The project uses GitHub Actions for automated testing and Docker image publishing.
+## GitHub Actions CI/CD & AI-Driven Failure Diagnosis
 
-The CI workflow runs on the `master` branch and performs the following general steps:
+The project uses GitHub Actions for automated testing, intelligent failure diagnosis, and Docker image publishing.
 
-```text
-1. Checkout source code
-2. Set up Python 3.10 and Python 3.11
-3. Install project dependencies
-4. Run pytest
-5. Enforce the coverage threshold
-6. Build the Docker image after successful tests
-7. Publish the image to Docker Hub when applicable
-```
-
-The configured minimum test coverage is:
+### Workflow Architecture
 
 ```text
-80%
+Source Push / PR
+    ↓
+Set up Python & Dependencies
+    ↓
+Run pytest & Coverage Gate (80%)
+    ├─► [SUCCESS] ──► Build Docker Image ──► Push to Docker Hub
+    │
+    └─► [FAILURE] ──► Trigger AI Failure Diagnosis (OpenAI API)
+                            ↓
+                      Parse pytest_log.txt
+                            ↓
+                      Generate Actionable Fix Suggestions (Traditional Chinese)     ?????
+
+Key CI/CD Features
+1. Automated Testing & Coverage Gate: Enforces a minimum of 80% test coverage. If tests fail or coverage falls below the
+   threshold, the pipeline stops immediately.
+2. AI Failure Diagnosis (gpt-4o-mini):
+    • Uses Bash Strict Mode "set -euo pipefail" to ensure test failure exit codes are accurately captured.
+    • When a failure occurs, an automated Python script reads pytest.log and sends the log payload to OpenAI's API.
+    • Resilient API handling includes built-in request timeouts (30s) and fast responses using gpt-4o-mini.
+    • Generates senior-engineer level troubleshooting advice and fix suggestions directly inside the GitHub Actions console log.
+3.  Automated PR Code Review: Integrates CodeRabbit AI to automatically perform code reviews on Pull Requests.
+4.  Automated Docker Deployment: Builds and pushes the updated Docker image to Docker Hub upon successful tests on the 
+    master branch.
 ```
-
-A failed test or failed coverage check prevents the deployment stage from continuing.
-
 ---
 
 ## Docker Hub Image
@@ -572,12 +584,14 @@ The GitHub Actions workflow references these secrets during the Docker Hub login
 
 The project follows several basic source-control and deployment safety practices:
 
+The project follows several basic source-control and deployment safety practices:
+
 * Real runtime credentials are stored in `.env`.
 * `.env` is excluded by `.gitignore`.
 * `.env.example` contains only safe placeholder values.
 * Real operational Excel files are excluded from Git.
 * Only safe sample inventory data is committed.
-* Docker Hub credentials are stored as GitHub repository secrets.
+* Docker Hub credentials and `OPENAI_API_KEY` are stored securely as **GitHub Repository Secrets**.
 * Docker images are published only after automated tests pass.
 * The coverage threshold is enforced before deployment.
 * Database connection settings are passed through environment variables.
@@ -645,27 +659,20 @@ Completed components:
 
 ## Technical Highlights
 
-This project demonstrates the modernization of a small operational desktop tool into a structured backend system.
+This project demonstrates the modernization of a small operational desktop tool into a structured backend system with automated AI diagnostics.
 
 Main engineering concepts include:
 
-* Layered architecture
-* Service and repository separation
+* Layered architecture & Service/Repository pattern
 * Dependency injection
-* Domain-oriented business rules
-* REST API design
-* Pydantic request validation
-* SQLAlchemy ORM
-* MySQL integration
-* Transaction rollback on database errors
-* Unit testing with pytest
-* API testing with fake dependencies
-* Docker Compose
-* GitHub Actions CI/CD
-* Coverage enforcement
-* Docker Hub publishing
-* Environment-variable security
-* Sample-data isolation
+* REST API design with FastAPI & Pydantic
+* SQLAlchemy ORM & MySQL integration
+* Unit testing with pytest & API fake dependencies
+* Docker Compose & Docker Hub publishing
+* GitHub Actions CI/CD with Coverage enforcement
+* 🤖 **LLM API Integration**: Automated test failure log analysis using OpenAI API (`gpt-4o-mini`)
+* 🤖 **CI/CD Resiliency**: Robust Bash error handling (`set -o pipefail`) and HTTP timeout management for API calls in CI pipelines
+* Environment-variable security & secret management
 
 ---
 

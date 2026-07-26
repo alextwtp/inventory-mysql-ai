@@ -110,9 +110,9 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  ----------------------------------------------------
-  3. Docker Setup and Push
-  ----------------------------------------------------
+  #----------------------------------------------------
+  # 3. Docker Setup and Push
+  #----------------------------------------------------
   docker-build-push:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest

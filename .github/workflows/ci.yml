@@ -55,7 +55,7 @@ jobs:
           
           api_key = os.environ.get('OPENAI_API_KEY')
           if not api_key:
-              print('Error:No OPENAI_API_KEY, Cannot be repaired.')
+              print('Error:Lack of OPENAI_API_KEY, Cannot be repaired.')
               exit(0)
 
           try:
@@ -132,8 +132,8 @@ jobs:
 
   #     - name: Build Docker image
   #       run: |
-  #         docker build -t alextwtpyeh/inventory-mysql:latest .
+  #         docker build -t alextwtpyeh/inventory-mysql-a1:latest .
 
   #     - name: Push Docker image
   #       run: |
-  #         docker push alextwtpyeh/inventory-mysql:latest
+  #         docker push alextwtpyeh/inventory-mysql-ai:latest

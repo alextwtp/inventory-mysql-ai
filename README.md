@@ -481,8 +481,6 @@ Real operational Excel files are excluded from source control.
 
 ---
 
----
-
 ## GitHub Actions CI/CD & AI-Driven Failure Diagnosis
 
 The project uses GitHub Actions for automated testing, intelligent failure diagnosis, and Docker image publishing.
@@ -499,9 +497,10 @@ Run pytest & Coverage Gate (80%)
     │
     └─► [FAILURE] ──► Trigger AI Failure Diagnosis (OpenAI API)
                             ↓
-                      Parse pytest_log.txt
+                      Parse pytest.log
                             ↓
-                      Generate Actionable Fix Suggestions (Traditional Chinese)     ?????
+                      Generate Actionable Fix Suggestions (English)
+```
 
 Key CI/CD Features
 1. Automated Testing & Coverage Gate: Enforces a minimum of 80% test coverage. If tests fail or coverage falls below the
@@ -514,7 +513,7 @@ Key CI/CD Features
 3.  Automated PR Code Review: Integrates CodeRabbit AI to automatically perform code reviews on Pull Requests.
 4.  Automated Docker Deployment: Builds and pushes the updated Docker image to Docker Hub upon successful tests on the 
     master branch.
-```
+    
 ---
 
 ## Docker Hub Image
@@ -581,8 +580,6 @@ The GitHub Actions workflow references these secrets during the Docker Hub login
 ---
 
 ## Security and Data-Safety Controls
-
-The project follows several basic source-control and deployment safety practices:
 
 The project follows several basic source-control and deployment safety practices:
 

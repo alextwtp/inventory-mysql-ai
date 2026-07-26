@@ -132,7 +132,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t alextwtpyeh/inventory-mysql-ai:latest
+          docker build -t alextwtpyeh/inventory-mysql-ai:latest .
 
       - name: Push Docker image
         run: |

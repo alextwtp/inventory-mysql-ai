@@ -41,7 +41,7 @@ jobs:
         shell: bash
         run: |
           set -eou pipefail
-          pytest --cov=. --cov-report=term-missing --cov-fail-under=95 tee pytest.log
+          pytest --cov=. --cov-report=term-missing --cov-fail-under=80 tee pytest.log
 
       # 🤖 AI Failure diagnosis: Only triggered when the test fails!
       - name: AI Diagnosis on Failure

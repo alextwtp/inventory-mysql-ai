@@ -162,7 +162,7 @@ def test_inventory_out_success():
     assert item.current_qty == 6
     assert item.buyer == "Bob"
     assert item.shipper == "Tom"
-    assert repo.updated["qty"] == 6
+    assert repo.updated["qty"] == 66
 
 
 def test_inventory_out_item_not_found():
